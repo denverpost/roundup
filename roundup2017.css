@@ -849,29 +849,29 @@ h6 {
   Margin-bottom: 10px;}
 
 h1 {
-  font-size: 34px; }
+  font-size: 32px; }
 
 h2 {
-  font-size: 30px; }
-
-h3 {
   font-size: 28px; }
 
-h4 {
+h3 {
   font-size: 24px; }
 
+h4 {
+  font-size: 21px; }
+
 h5 {
-  font-size: 20px; }
+  font-size: 18px; }
 
 h6 {
-  font-size: 18px; }
+  font-size: 16px; }
 
 body,
 table.body,
 p,
 td,
 th {
-  font-size: 22px;
+  font-size: 18px;
   line-height: 1.4; }
 
 p {
@@ -1355,11 +1355,16 @@ body.outlook p {
 /*CUSTOM STYLES*/
 
 p.number {
-	font-size: 5em;
+	font-size: 4em;
 	text-align: center;
 	font-weight: bold;
 	margin:0;
 	padding:0;
+}
+@media only screen and (max-width: 550px) {
+  p.number {
+    font-size: 2.5em;
+  }
 }
 
 p.credit {
@@ -1402,7 +1407,6 @@ p.leader {
 }
 
 p.byline {
-	font-size: 0.8em;
 	font-style: italic;
 	font-weight: bold;
 	text-align: center;
@@ -1425,7 +1429,7 @@ p.signup a {
 }
 
 p.footer {
-	font-size:0.8em;
+	font-size:0.7em;
 }
 
 hr {
@@ -1434,6 +1438,15 @@ hr {
 
 h2 {
 	line-height:1.5em;
+}
+
+table.sharebox {
+  margin: 3em 0 2em;
+}
+table.sharebox,
+table.sharebox th,
+table.sharebox th p {
+  text-align:center;
 }
 
 /*SPONSORED POST*/
@@ -1455,7 +1468,7 @@ h2.sponsor {
 
 p.share {
 	text-transform: uppercase;
-	font-size: 0.6em;
+	font-size: 0.8em;
 	text-align:center;
 	font-weight: bold;
 	color:#bf0b3b;
