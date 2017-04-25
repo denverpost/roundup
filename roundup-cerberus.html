@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8"> <!-- utf-8 works for most cases -->
+	<meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
+    <meta name="x-apple-disable-message-reformatting">  <!-- Disable auto-scale in iOS 10 Mail entirely -->
+    <title></title> <!-- The title tag shows in email notifications, like Android 4.4. -->
+
+     <!-- CSS Reset -->
+     <style>
+
+      /* What it does: Remove spaces around the email design added by some email clients. */
+      /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
+      html,
+      body {
+         margin: 0 auto !important;
+         padding: 0 !important;
+         height: 100% !important;
+         width: 100% !important;
+     }
+
+     /* What it does: Stops email clients resizing small text. */
+     * {
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    /* What it does: Centers email on Android 4.4 */
+    div[style*="margin: 16px 0"] {
+        margin:0 !important;
+    }
+
+    /* What it does: Stops Outlook from adding extra spacing to tables. */
+    table,
+    td {
+        mso-table-lspace: 0pt !important;
+        mso-table-rspace: 0pt !important;
+    }
+
+    /* What it does: Fixes webkit padding issue. Fix for Yahoo mail table alignment bug. Applies table-layout to the first 2 tables then removes for anything nested deeper. */
+    table {
+        border-spacing: 0 !important;
+        border-collapse: collapse !important;
+        table-layout: fixed !important;
+        margin: 0 auto !important;
+    }
+    table table table {
+        table-layout: auto;
+    }
+
+    /* What it does: Uses a better rendering method when resizing images in IE. */
+    img {
+        -ms-interpolation-mode:bicubic;
+    }
+
+    /* What it does: A work-around for iOS meddling in triggered links. */
+    *[x-apple-data-detectors] {
+        color: inherit !important;
+        text-decoration: none !important;
+    }
+
+    /* What it does: A work-around for Gmail meddling in triggered links. */
+    .x-gmail-data-detectors,
+    .x-gmail-data-detectors *,
+    .aBn {
+        border-bottom: 0 !important;
+        cursor: default !important;
+    }
+
+    /* What it does: Prevents Gmail from displaying an download button on large, non-linked images. */
+    .a6S {
+     display: none !important;
+     opacity: 0.01 !important;
+ }
+ /* If the above doesn't work, add a .g-img class to any image in question. */
+ img.g-img + div {
+     display:none !important;
+ }
+
+ /* What it does: Prevents underlining the button text in Windows 10 */
+ .button-link {
+    text-decoration: none !important;
+}
+
+/* What it does: Removes right gutter in Gmail iOS app: https://github.com/TedGoas/Cerberus/issues/89  */
+/* Create one of these media queries for each additional viewport size you'd like to fix */
+/* Thanks to Eric Lepetit @ericlepetitsf) for help troubleshooting */
+@media only screen and (min-device-width: 375px) and (max-device-width: 413px) { /* iPhone 6 and 6+ */
+    .email-container {
+        min-width: 375px !important;
+    }
+}
+
+</style>
+
+<!-- What it does: Makes background images in 72ppi Outlook render at correct size. -->
+	<!--[if gte mso 9]>
+	<xml>
+		<o:OfficeDocumentSettings>
+			<o:AllowPNG/>
+			<o:PixelsPerInch>96</o:PixelsPerInch>
+		</o:OfficeDocumentSettings>
+	</xml>
+	<![endif]-->
+
+    <!-- Progressive Enhancements -->
+    <style>
+
+        /* What it does: Hover styles for buttons */
+        .button-td,
+        .button-a {
+            transition: all 100ms ease-in;
+        }
+        .button-td:hover,
+        .button-a:hover {
+            background: #555555 !important;
+            border-color: #555555 !important;
+        }
+
+        /* Media Queries */
+        @media screen and (max-width: 600px) {
+
+            .email-container {
+                width: 100% !important;
+                margin: auto !important;
+            }
+
+            /* What it does: Forces elements to resize to the full width of their container. Useful for resizing images beyond their max-width. */
+            .fluid {
+                max-width: 100% !important;
+                height: auto !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+
+            /* What it does: Forces table cells into full-width rows. */
+            .stack-column,
+            .stack-column-center {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                direction: ltr !important;
+            }
+            /* And center justify these ones. */
+            .stack-column-center {
+                text-align: center !important;
+            }
+
+            /* What it does: Generic utility class for centering. Useful for images, buttons, and nested tables. */
+            .center-on-narrow {
+                text-align: center !important;
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                float: none !important;
+            }
+            table.center-on-narrow {
+                display: inline-block !important;
+            }
+
+        }
+/*CUSTOM STYLES*/
+
+h2 {line-height: 1.2em;margin-top:.5em;}
+p {font-family: sans-serif; font-size: 18px; line-height: 1.4em;color: #000000;}
+p.number {text-align: center;line-height:1em;font-size:3.5em;font-weight: bold;padding: 0;margin:0;}
+p.leader {text-transform: uppercase;font-weight: bold;font-size: 12px;color: #cccccc;letter-spacing: 1px;}
+p.byline {text-transform: uppercase;font-size:14px;font-weight: bold;line-height: 1.5em; color:maroon;}
+p.credit {text-align: right;font-size:14px;font-style: italic;background-color: #eeeeee;padding:1%;margin: 0;}
+p.cutline {font-size:14px;background-color: #eeeeee;padding:1%;margin: 0;}
+blockquote {font-family: Georgia,serif;font-weight: bold;line-height: 1.4em;}
+p.source {text-transform: uppercase;font-size:14px;font-weight: bold;line-height: 1.5em; color:maroon;}
+p a, li a { position: relative;
+    margin: .67em 0;
+    padding: 0 .15em;
+    text-decoration: none;
+    color: #1243A8;
+    border-bottom: 3px solid gold;}
+
+    </style>
+
+</head>
+<body width="100%" bgcolor="#222222" style="margin: 0; mso-line-height-rule: exactly;">
+    <center style="width: 100%; background: #222222; text-align: left;">
+
+        <!-- PREVIEW TEXT -->
+        <div style="display:none;font-size:1px;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;mso-hide:all;font-family: sans-serif;">
+            [-PREVIEW_TEXT-]
+        </div>
+        <!-- END PREVIEW TEXT -->
+
+        <!-- HEADER -->
+        <table role="presentation" aria-hidden="true" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="600" style="margin: auto; background: #ffffff; font-family: sans-serif; font-size: 18px; line-height: 22px; " class="email-container">
+           <tr>
+            <td style="padding: 20px 0; text-align: center">
+             <a href="http://dpo.st/roundup" title="http://dpo.st/roundup"><img src="http://extras.denverpost.com/newsletter/roundup-logo.png" aria-hidden="true" width="400" height="50" alt="alt_text" border="0" style="height: auto; max-width:400px; background: #ffffff; font-family: sans-serif; font-size: 18px; line-height: 1.3em; "></a>
+             <!-- SPONSORED HEADER -->
+             <p class="leader">Presented By</p>
+             <a href="http://afw.com"><img src="http://extras.denverpost.com/newsletter/ads/afw-copyright.png" alt="American Furniture Warehouse"  aria-hidden="true" width="220" height="50" alt="alt_text" border="0" style="height: auto; background: #ffffff; font-family: sans-serif; font-size: 18px; line-height: 20px; "></a>
+             <!-- END SPONSORED HEADER -->
+         </td>
+     </tr>
+ </table>
+ <!-- HEADER END -->
+ <!-- Email Body : BEGIN -->
+ <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="600" style="margin: auto;" class="email-container">
+     <!-- Clear Spacer : BEGIN -->
+     <tr>
+        <td height="15" style="font-size: 0; line-height: 0;">
+            &nbsp;
+        </td>
+    </tr>
+    <!-- Clear Spacer : END -->
+
+    <!-- INTRO -->
+    <tr>
+    <td bgcolor="#ffffff" style="padding: 5%; font-family: sans-serif; font-size: 18px; line-height: 22px; ">
+    <p class="byline">By Eric Lubbers<br /><a href="mailto:elubbers+mhr@denverpost.com?subject=Roundup Feedback" title="Email Eric Lubbers @ The Denver Post">elubbers@denverpost.com</a> / <a href="http://twitter.com/brofax" title="@brofax on Twitter">@brofax</a></p>
+            <p>Helllloooooo, Colorado and beyond. It's Friday, the twilight between the week and the weekend, where the best laid plans for how to wring every drop of joy out of your 48 hours of freedom solidify from thought to action. So here's the question: What are you up to?</p>
+            <p>You could hit one of Colorado's national parks (admission is free and <a href="http://www.denverpost.com/2017/04/18/national-park-week-free-colorado-attractions/" title="http://www.denverpost.com/2017/04/18/national-park-week-free-colorado-attractions/">we have a great little guide on how to take advantage</a>) or add some <a href="http://www.denverpost.com/2017/04/21/fragrance-colorado-garden/" title="http://www.denverpost.com/2017/04/21/fragrance-colorado-garden/">fragrance to your Colorado garden</a> or even check out some lions, tigers and bears for <a href="http://www.denverpost.com/2017/04/20/wild-animal-sanctuary-deals-around-denver/" title="http://www.denverpost.com/2017/04/20/wild-animal-sanctuary-deals-around-denver/">free at the Wild Animal Sanctuary just of I-76</a> (among other <a href="http://www.denverpost.com/2017/04/20/wild-animal-sanctuary-deals-around-denver/" title="http://www.denverpost.com/2017/04/20/wild-animal-sanctuary-deals-around-denver/">deals for the week ahead</a>).</p>
+            <p>Or — and this is a perfectly acceptable answer — you could just hang out at the house and bingewatch <a href="http://amzn.to/2oZx39A" title="http://amzn.to/2oZx39A">all the ’80s seasons of Unsolved Mysteries</a>.</p>
+            <p>OK, we have too much news to go down a Robert Stack rabbit hole right now. Let's get to it already.</p>
+            <!-- Button : BEGIN --> <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto"> <tr> <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td"> <a href="[-CLICK_TO_VIEW-]" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a"> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ffffff;">VIEW IN BROWSER</span>&nbsp;&nbsp;&nbsp;&nbsp; </a> </td> </tr> </table> <!-- Button : END -->
+        </td>
+    </tr>
+    <!-- INTRO END -->
+
+    <!-- Clear Spacer : BEGIN --> <tr> <td height="20" style="font-size: 0; line-height: 0;"> &nbsp; </td> </tr> <!-- Clear Spacer : END -->
+
+    <!-- 1 Column Text : BEGIN -->
+    <tr>
+        <td bgcolor="#ffffff">
+            <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+             <tr>
+                <td style="padding: 5%; font-family: sans-serif; font-size: 18px; line-height: 1.3em; ">
+                    <h2>Who trashed Civic Center Park? Sea of garbage greets Denver denizens this morning</h2>
+<a href="http://www.denverpost.com/2017/04/21/denver-420-rally-civic-center-park/"><img src="http://www.denverpost.com/wp-content/uploads/2017/04/420_marijuana_denver_2017_rj_28724.jpg?w=810" alt="" style="width:100%;" /></a>
+<p class="credit">RJ Sangosti, The Denver Post</p>
+<p class="cutline">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.</p>
+<p>Organizers say that after yesterday's 4/20 rally in Civic Center Park, trash was picked up and left in bags and boxes for pickup this morning. But before they were finished, <a href="http://www.denverpost.com/2017/04/21/denver-420-rally-civic-center-park/" title="http://www.denverpost.com/2017/04/21/denver-420-rally-civic-center-park/">a man went through the park wielding a knife and tearing into bags</a>. Danika Worthington is <a href="http://www.denverpost.com/2017/04/21/denver-420-rally-civic-center-park/" title="http://www.denverpost.com/2017/04/21/denver-420-rally-civic-center-park/">following the story while police search for the garbage bandit</a>.</p>
+<p>+ Except for the trash, yesterday's drizzling rally was a mostly quiet affair. <a href="http://www.denverpost.com/2017/04/20/shots-fired-denver-420-celebration/" title="http://www.denverpost.com/2017/04/20/shots-fired-denver-420-celebration/">Two people were arrested for discharging a firearm</a> about a block away from the rally (by The Post building, actually) and some people mad about the lines <a href="https://www.facebook.com/denverpost/videos/10154779186579440/" title="https://www.facebook.com/denverpost/videos/10154779186579440/">jumped the fences</a>, but no one was injured.</p>
+<h2>Young barista has a meltdown over Unicorn Frappuccino</h2>
+<p>We had <a href="https://www.facebook.com/denverentertain/videos/1416795868342148/" title="https://www.facebook.com/denverentertain/videos/1416795868342148/">some fun with the Starbucks Unicorn Frappuccino</a>, but for one Colorado barista, the <a href="http://www.denverpost.com/2017/04/20/starbucks-barista-unicorn-frappuccino/" title="http://www.denverpost.com/2017/04/20/starbucks-barista-unicorn-frappuccino/">absurdity of its very existence turned him into a viral star</a>. <a href="https://en.wikipedia.org/wiki/15_minutes_of_fame" title="https://en.wikipedia.org/wiki/15_minutes_of_fame">Andy Warhol was right, folks</a>.</p>
+<h2>Colorado could see double-digit health insurance hikes if action isn't taken soon</h2>
+<blockquote>
+“Uncertainty around the individual insurance market for 2018 is making everyone nervous. And ultimately, this uncertainty is going to hurt Colorado consumers.”
+    <p class="source">Marguerite Salazar, Colorado Insurance Commissioner</p>
+</blockquote>
+<p>The Affordable Care Act, no matter where you land on the political aisle, needs help. While Republicans are having <a href="http://www.denverpost.com/2017/04/20/health-care-bill-deal-republicans/" title="http://www.denverpost.com/2017/04/20/health-care-bill-deal-republicans/">lukewarm conversations about another repeal/replace effort</a>, Colorado's insurers are warning that continued inaction — either a new plan or fixes to stabilize the current system — could <a href="http://www.denverpost.com/2017/04/20/colorado-health-insurance-rate-hikes-possible/" title="http://www.denverpost.com/2017/04/20/colorado-health-insurance-rate-hikes-possible/">directly cause rates to skyrocket</a> in 2018. John Ingold goes deep into the circumstances causing the uncertainty and the <a href="http://www.denverpost.com/2017/04/20/colorado-health-insurance-rate-hikes-possible/" title="http://www.denverpost.com/2017/04/20/colorado-health-insurance-rate-hikes-possible/">actions that could be taken to stabilize the market</a>.</p>
+</td></tr></table>
+    <!-- Clear Spacer : BEGIN --> <tr> <td height="20" style="font-size: 0; line-height: 0;"> &nbsp; </td> </tr> <!-- Clear Spacer : END -->
+<tr>
+        <td bgcolor="#ffffff">
+            <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+             <tr>
+                <td style="padding: 5%; font-family: sans-serif; font-size: 18px; line-height: 1.3em; ">
+<h2>By The Numbers</h2>
+<p class="number">4 min, 13 sec</p>
+<p>That's how long after the <a href="http://www.denverpost.com/2017/04/18/fresno-shooting-kori-ali-muhammad/" title="http://www.denverpost.com/2017/04/18/fresno-shooting-kori-ali-muhammad/">Fresno gunman fired the first shot</a> in his rampage that killed three people that he was in custody, and the police <a href="http://www.denverpost.com/2017/04/20/fresno-rampage-shotspotter/" title="http://www.denverpost.com/2017/04/20/fresno-rampage-shotspotter/">credit the city's ShotSpotter technology</a>, which is used in parts of Denver.</p>
+<p class="number">10,000x</p>
+<p>That's how much more powerful the opioid carfentanil — an elephant tranquilizer found <a href="http://www.denverpost.com/2017/04/20/elephant-tranquilizer-heroin-eagle-county/" title="http://www.denverpost.com/2017/04/20/elephant-tranquilizer-heroin-eagle-county/">in heroin pills at the scene of two deaths in Eagle County</a> — is than morphine. It even makes fentanyl, the drug that <a href="http://www.denverpost.com/2016/06/02/apnewsbreak-official-says-prince-died-of-opioid-overdose/" title="http://www.denverpost.com/2016/06/02/apnewsbreak-official-says-prince-died-of-opioid-overdose/">killed Prince</a> and has been the subject of several <a href="http://www.denverpost.com/tag/fentanyl/" title="http://www.denverpost.com/tag/fentanyl/">high-profile theft cases</a> in Colorado, look weak.</p>
+<p class="number">2.6%</p>
+<p>That was Colorado's unemployment rate in March, which is the <a href="http://www.denverpost.com/2017/04/21/colorado-unemployment-lowest-in-state-history/" title="http://www.denverpost.com/2017/04/21/colorado-unemployment-lowest-in-state-history/">lowest of any state in the country</a> and the lowest in Colorado's recorded history (though that record only goes back to 1976).</p>
+</td></tr></table>
+    <!-- Clear Spacer : BEGIN --> <tr> <td height="20" style="font-size: 0; line-height: 0;"> &nbsp; </td> </tr> <!-- Clear Spacer : END -->
+<tr>
+        <td bgcolor="#ffffff">
+            <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+             <tr>
+                <td style="padding: 5%; font-family: sans-serif; font-size: 18px; line-height: 1.3em; ">
+<!-- SPONSORED CHUNK -->
+<p class="sponsorlabel">SPONSORED</p>
+<h2 class="sponsor"></h2>
+<p></p>
+<p class="sponsorlabel">SPONSORED</p>
+<!-- END SPONSORED -->
+</td></tr></table>
+    <!-- Clear Spacer : BEGIN --> <tr> <td height="20" style="font-size: 0; line-height: 0;"> &nbsp; </td> </tr> <!-- Clear Spacer : END -->
+<tr>
+        <td bgcolor="#ffffff">
+            <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+             <tr>
+                <td style="padding: 5%; font-family: sans-serif; font-size: 18px; line-height: 1.3em; ">
+<h2>Quick Hits</h2>
+<p>+ The Broncos are facing <a href="http://www.denverpost.com/2017/04/20/broncos-schedule-2017/" title="http://www.denverpost.com/2017/04/20/broncos-schedule-2017/">the hardest schedule in the NFL</a>.</p>
+<p>+ Alamo Drafthouse Sloans Lake <a href="http://theknow.denverpost.com/2017/04/20/alamo-drafterhouse-denver-sloan-lake-opening-date/141927/" title="http://theknow.denverpost.com/2017/04/20/alamo-drafterhouse-denver-sloan-lake-opening-date/141927/">has an opening date that is closer than you might think</a>. I'm extremely excited about this one.</p>
+<p>+ Arkansas carried out the first execution in its plan to <a href="http://www.denverpost.com/2017/04/20/arkansas-executions/" title="http://www.denverpost.com/2017/04/20/arkansas-executions/">execute eight men before a supply of drugs expires</a> at the end of the month. It should be noted that the Supreme Court voted 5-4 to deny a stay of execution, showing the <a href="http://www.denverpost.com/2017/04/20/arkansas-executions/" title="http://www.denverpost.com/2017/04/20/arkansas-executions/">immediate impact of Justice Gorsuch on the bench</a>.</p>
+<p>+ DU's star coach Jim Montgomery is being courted by NHL teams and Mark Kiszla thinks <a href="http://www.denverpost.com/2017/04/20/jim-montgomery-colorado-avalanche-mark-kiszla/" title="http://www.denverpost.com/2017/04/20/jim-montgomery-colorado-avalanche-mark-kiszla/">the Avs would have to be crazy or stupid to let any other team hire him</a>.</p>
+<p>+ The Rockies sit in first place in the NL West right now and have been taking down some of the league's best pitchers, often on the road. But we've been here before and been disappointed, right? Maybe not, as the team <a href="http://www.denverpost.com/2017/04/20/rockies-believe-strong-start-sustainable/" title="http://www.denverpost.com/2017/04/20/rockies-believe-strong-start-sustainable/">believes they have the tools to make this hot start last (unlike, you know, basically every other season)</a>.</p>
+<p>+ Remember the <a href="https://www.youtube.com/watch?v=JBwIDwJEkjs" title="https://www.youtube.com/watch?v=JBwIDwJEkjs">Columbia Record Club</a>? Well, the basic concept — minus the tricky contracts — is back in a big way and <a href="http://theknow.denverpost.com/2017/04/20/denver-vinyl-me-please-record-store-day-2017/141612/" title="http://theknow.denverpost.com/2017/04/20/denver-vinyl-me-please-record-store-day-2017/141612/">Denver's Vinyl Me, Please is leading the charge</a>.</p>
+</td></tr></table>
+    <!-- Clear Spacer : BEGIN --> <tr> <td height="20" style="font-size: 0; line-height: 0;"> &nbsp; </td> </tr> <!-- Clear Spacer : END -->
+<tr>
+        <td bgcolor="#ffffff">
+            <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+             <tr>
+                <td style="padding: 5%; font-family: sans-serif; font-size: 18px; line-height: 1.3em; ">
+<!-- HOUSE AD -->
+<h3 class="housead"><span style="color:#812317;">Support local journalism:</span> Receive 20 weeks of The Denver Post, delivered Wed/Sun/Holidays <a href="https://www.denverpostmemberservices.com/dssSubscribe.aspx?pid=1089" title="https://www.denverpostmemberservices.com/dssSubscribe.aspx?pid=1089">for only $2 per week</a>. This includes the digital replica edition on all your devices and access to the digital The Washington Post.</h3>
+<!-- END HOUSE AD -->
+</td></tr></table>
+    <!-- Clear Spacer : BEGIN --> <tr> <td height="20" style="font-size: 0; line-height: 0;"> &nbsp; </td> </tr> <!-- Clear Spacer : END -->
+<tr>
+        <td bgcolor="#ffffff">
+            <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+             <tr>
+                <td style="padding: 5%; font-family: sans-serif; font-size: 18px; line-height: 1.3em; ">
+<h2>What We're Reading</h2>
+<p>+ What Colorado giveth (this <a href="https://www.denverite.com/hot-news-colorado-get-chile-license-plates-2018-34029/" title="https://www.denverite.com/hot-news-colorado-get-chile-license-plates-2018-34029/">super-slick Pueblo Chile license plate</a>) Colorado can taketh away (like <a href="http://www.9news.com/news/local/next/14-colorado-license-plates-facing-extinction/432565002" title="http://www.9news.com/news/local/next/14-colorado-license-plates-facing-extinction/432565002">these other 14 license plates, including Nuggets, Avs, Rockies</a>). <strong><em>— Denverite, 9News</em></strong></p>
+<p>+ Here's a great look at how Colorado's Mallory Pugh is calling her own shots in <a href="http://www.sbnation.com/soccer/2017/4/18/15343240/mallory-pugh-pro-team-uswnt-nwsl-psg-lyon-portland-thorns?utm_campaign=kevinmccauley&utm_content=chorus&utm_medium=social&utm_source=twitter" title="http://www.sbnation.com/soccer/2017/4/18/15343240/mallory-pugh-pro-team-uswnt-nwsl-psg-lyon-portland-thorns?utm_campaign=kevinmccauley&utm_content=chorus&utm_medium=social&utm_source=twitter">how she can make a living as one of the best soccer players in the world</a> (there's also a video of her just scoring beautiful goals if you don't care about the economics of sports). <strong><em>— SB Nation</em></strong></p>
+<p>+ Speaking of the weird world of sports, economics and privacy, this is a stunningly freaky story about how some college athletes are wearing bracelets that <a href="http://deadspin.com/why-is-this-wearable-tech-company-helping-college-teams-1794218363" title="http://deadspin.com/why-is-this-wearable-tech-company-helping-college-teams-1794218363">track how often they sleep, drink, have sex and just about every other biological action they are capable of</a>, all for an unknown amount of improvement on the field.  <strong><em>— Deadspin</em></strong></p>
+<p>+ This is another reminder: Just because people make a slick video for Kickstarter <a href="http://www.theverge.com/circuitbreaker/2017/4/20/15375842/plastc-bankrupt-campaign-fold-backers" title="http://www.theverge.com/circuitbreaker/2017/4/20/15375842/plastc-bankrupt-campaign-fold-backers">doesn't mean they won't just take $9 million and vanish</a>. <strong><em>— The Verge</em></strong></p>
+<p>+ There's a steamy soap opera broadcast by MTV in several African countries that isn't just a ratings hit: <a href="http://www.npr.org/sections/goatsandsoda/2017/04/18/522869551/watch-the-mtv-soap-opera-that-is-secretly-teaching-sex-ed?utm_source=dlvr.it&utm_medium=twitter" title="http://www.npr.org/sections/goatsandsoda/2017/04/18/522869551/watch-the-mtv-soap-opera-that-is-secretly-teaching-sex-ed?utm_source=dlvr.it&utm_medium=twitter">it's the most powerful public health message on the continent</a>. <strong><em>— NPR’s Goats and Soda</em></strong></p>
+</td></tr></table>
+    <!-- Clear Spacer : BEGIN --> <tr> <td height="20" style="font-size: 0; line-height: 0;"> &nbsp; </td> </tr> <!-- Clear Spacer : END -->
+<tr>
+        <td bgcolor="#ffffff">
+            <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+             <tr>
+                <td style="padding: 5%; font-family: sans-serif; font-size: 18px; line-height: 1.3em; ">
+<h2>Meanwhile, In America</h2>
+<p>+ It appears that the Trump administration has deported a "dreamer" (aka a protected immigrant who arrived in the country as a child), but there are <a href="http://www.denverpost.com/2017/04/20/donald-trump-deportation-dreamer/" title="http://www.denverpost.com/2017/04/20/donald-trump-deportation-dreamer/">a lot of big questions about the circumstances around Juan Manuel Montes Bojorquez's deportation</a> that muddy the waters. <strong><em>— via WaPo</em></strong></p>
+<p>+ Like most weekends, there will be a protest in downtown Denver. But this one could be bigger than most, so here's <a href="http://www.denverpost.com/2017/04/21/march-for-science-denver/" title="http://www.denverpost.com/2017/04/21/march-for-science-denver/">what you need to know about the March for Science in Denver tomorrow</a> and a primer for <a href="http://www.denverpost.com/2017/04/21/march-for-science-washington-400-cities/" title="http://www.denverpost.com/2017/04/21/march-for-science-washington-400-cities/">why the march is happening in the first place</a>. <strong><em>— DP</em></strong></p>
+<p>+ This is <a href="http://www.denverpost.com/2017/04/20/ted-nugent-sarah-palin-kid-rock-white-house/" title="http://www.denverpost.com/2017/04/20/ted-nugent-sarah-palin-kid-rock-white-house/">quite the crew that hung out at the White House yesterday</a>.</p>
+<p>+ While the Republicans are in power and operating at historically low approval ratings, things aren't going great for the Democrats:</p>
+<ul>
+    <li>Tom Perez and Bernie Sanders <a href="https://fightbacktour.com/" title="https://fightbacktour.com/">embarked on a "Fight Back" tour to unite the party</a>.</li>
+    <li>Almost immediately, though, the harsh divide that developed <a href="https://news.vice.com/story/the-democrats-are-falling-apart-on-their-come-together-tour" title="https://news.vice.com/story/the-democrats-are-falling-apart-on-their-come-together-tour">between Hillary Clinton supporters and Bernie supporters during the primaries was on full display</a>.</li>
+    <li>The AP writes that the party is hoping that Sanders can channel <a href="http://www.denverpost.com/2017/04/20/bernie-sanders-youth-democrats/" title="http://www.denverpost.com/2017/04/20/bernie-sanders-youth-democrats/">the passion of his young supporters to strengthen the party</a>.</li>
+    <li>But in a highly controversial move inside the party, Bernie is traveling to Omaha to <a href="http://www.npr.org/2017/04/20/524962482/sanders-defends-campaigning-for-anti-abortion-rights-democrat" title="http://www.npr.org/2017/04/20/524962482/sanders-defends-campaigning-for-anti-abortion-rights-democrat">campaign for a Democratic mayoral candidate who opposes abortion rights</a>.</li>
+    <li>This friction will be the story of 2018, so keep an eye on it.</li>
+</ul>
+<p>+ Many questions have been brought up about the ethics of Donald Trump's new DC hotel that opened just before his inauguration (<a href="http://www.npr.org/2017/02/08/513904816/ethics-experts-find-holes-in-trumps-firewall-against-conflicts" title="http://www.npr.org/2017/02/08/513904816/ethics-experts-find-holes-in-trumps-firewall-against-conflicts">which he still profits from, despite not actively running its operations</a>). But a quick scan of Fox News shows <a href="http://www.foxnews.com/us/2017/04/21/bell-tower-atop-trumps-post-office-hotel-is-best-view-in-dc.html" title="http://www.foxnews.com/us/2017/04/21/bell-tower-atop-trumps-post-office-hotel-is-best-view-in-dc.html">a video tour calling the hotel "the best view in DC."</a> Take that for what you will. <strong><em>— NPR, Fox News</em></strong></p>
+</td></tr></table>
+    <!-- Clear Spacer : BEGIN --> <tr> <td height="20" style="font-size: 0; line-height: 0;"> &nbsp; </td> </tr> <!-- Clear Spacer : END -->
+<tr>
+        <td bgcolor="#ffffff">
+            <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+             <tr>
+                <td style="padding: 5%; font-family: sans-serif; font-size: 18px; line-height: 1.3em; ">
+<h2>Song of the Day</h2>
+<p><strong>Song:</strong> “<a href="https://www.youtube.com/watch?v=vIcHwosaoHE" title="https://www.youtube.com/watch?v=vIcHwosaoHE">Homewrecker</a>”</p>
+<p><strong>Artist:</strong> Nick Lowe</p> 
+<p><strong>Sounds like:</strong> Do you like sparse organ work that builds into a gospel-like frenzy coupled with some of the most biting lyrics in the game? Then you'll enjoy this. Don't know what I mean by any of that? Well, you'll enjoy it, too.</p>
+<p>Did you know we put all of these songs on a <a href="http://open.spotify.com/user/ericjlubbers/playlist/0qyRwyDlwECmsGb3JwPeE8">Spotify playlist</a>, or, <strong>if you don't have a Spotify account</strong>, <a href="http://www.denverpost.com/2016/07/13/pump-up-the-jam/">a page where you non-Spotify people can listen to it</a>? It's a really, really good playlist, if I do say so myself. I listen to it on shuffle just about every day (and you should too).</p>
+</td></tr></table>
+    <!-- Clear Spacer : BEGIN --> <tr> <td height="20" style="font-size: 0; line-height: 0;"> &nbsp; </td> </tr> <!-- Clear Spacer : END -->
+<tr>
+        <td bgcolor="#ffffff">
+            <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+             <tr>
+                <td style="padding: 5%; font-family: sans-serif; font-size: 18px; line-height: 1.3em; ">
+<h2>Hat Tips & Corrections</h2>
+<p>Remember, if you see something that doesn't look right or just have a comment, thought or suggestion, <a href="mailto:elubbers@denverpost.com">email me at elubbers@denverpost.com</a> or <a href="http://twitter.com/brofax">yell at me on Twitter</a>.</p>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<!-- 1 Column Text : END -->
+
+</table>
+<!-- Email Body : END -->
+
+<!-- Email Footer : BEGIN -->
+<table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="600" style="margin: auto;" class="email-container">
+    <tr>
+        <td style="padding: 40px 10px;width: 100%;font-size: 12px; font-family: sans-serif; line-height:18px; text-align: center; color: #888888;" class="x-gmail-data-detectors">
+            <webversion style="color:#cccccc; text-decoration:underline; font-weight: bold;">View as a Web Page</webversion>
+            <br><br>
+            Company Name<br>123 Fake Street, SpringField, OR, 97477 US<br>(123) 456-7890
+            <br><br>
+            <unsubscribe style="color:#888888; text-decoration:underline;">unsubscribe</unsubscribe>
+        </td>
+    </tr>
+</table>
+<!-- Email Footer : END -->
+
+</center>
+</body>
+</html>
