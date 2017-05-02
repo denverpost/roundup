@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"> <!-- utf-8 works for most cases -->
+    <meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
+    <meta name="x-apple-disable-message-reformatting">  <!-- Disable auto-scale in iOS 10 Mail entirely -->
+    <title></title> <!-- The title tag shows in email notifications, like Android 4.4. -->
+
+    <!-- Web Font / @font-face : BEGIN -->
+    <!-- NOTE: If web fonts are not required, lines 10 - 27 can be safely removed. -->
+
+    <!-- Desktop Outlook chokes on web font references and defaults to Times New Roman, so we force a safe fallback font. -->
+    <!--[if mso]>
+        <style>
+            * {
+                font-family: sans-serif !important;
+            }
+        </style>
+        <![endif]-->
+
+        <!-- All other clients get the webfont reference; some will render the font and others will silently fail to the fallbacks. More on that here: http://stylecampaign.com/blog/2015/02/webfont-support-in-email/ -->
+        <!--[if !mso]><!-->
+        <!-- insert web font reference, eg: <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'> -->
+        <!--<![endif]-->
+
+        <!-- Web Font / @font-face : END -->
+
+        <!-- CSS Reset -->
+        <style>
+
+            /* What it does: Remove spaces around the email design added by some email clients. */
+            /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
+            html,
+            body {
+                margin: 0 auto !important;
+                padding: 0 !important;
+                height: 100% !important;
+                width: 100% !important;
+            }
+
+            /* What it does: Stops email clients resizing small text. */
+            * {
+                -ms-text-size-adjust: 100%;
+                -webkit-text-size-adjust: 100%;
+            }
+
+            /* What it does: Centers email on Android 4.4 */
+            div[style*="margin: 16px 0"] {
+                margin:0 !important;
+            }
+
+            /* What it does: Stops Outlook from adding extra spacing to tables. */
+            table,
+            td {
+                mso-table-lspace: 0pt !important;
+                mso-table-rspace: 0pt !important;
+            }
+
+            /* What it does: Fixes webkit padding issue. Fix for Yahoo mail table alignment bug. Applies table-layout to the first 2 tables then removes for anything nested deeper. */
+            table {
+                border-spacing: 0 !important;
+                border-collapse: collapse !important;
+                table-layout: fixed !important;
+                margin: 0 auto !important;
+            }
+            table table table {
+                table-layout: auto;
+            }
+
+            /* What it does: Uses a better rendering method when resizing images in IE. */
+            img {
+                -ms-interpolation-mode:bicubic;
+            }
+
+            /* What it does: A work-around for iOS meddling in triggered links. */
+            *[x-apple-data-detectors] {
+                color: inherit !important;
+                text-decoration: none !important;
+            }
+
+            /* What it does: A work-around for Gmail meddling in triggered links. */
+            .x-gmail-data-detectors,
+            .x-gmail-data-detectors *,
+            .aBn {
+                border-bottom: 0 !important;
+                cursor: default !important;
+            }
+
+            /* What it does: Prevents Gmail from displaying an download button on large, non-linked images. */
+            .a6S {
+                display: none !important;
+                opacity: 0.01 !important;
+            }
+            /* If the above doesn't work, add a .g-img class to any image in question. */
+            img.g-img + div {
+                display:none !important;
+            }
+
+            /* What it does: Prevents underlining the button text in Windows 10 */
+            .button-link {
+                text-decoration: none !important;
+            }
+
+            /* What it does: Removes right gutter in Gmail iOS app: https://github.com/TedGoas/Cerberus/issues/89  */
+            /* Create one of these media queries for each additional viewport size you'd like to fix */
+            /* Thanks to Eric Lepetit @ericlepetitsf) for help troubleshooting */
+            @media only screen and (min-device-width: 375px) and (max-device-width: 413px) { /* iPhone 6 and 6+ */
+                .email-container {
+                    min-width: 375px !important;
+                }
+            }
+            /*CUSTOM STYLES*/
+            h2 {line-height: 1.2em;margin:.5em 0;}
+            html, body {font-family: sans-serif; font-size: 19px; line-height: 120%;color: #000000;margin: 0 auto !important; padding: 0 !important; height: 100% !important; width: 100% !important;mso-line-height-rule: exactly;}
+            p {line-height:145%;}
+            p.number {text-align: center;line-height:110%;font-size:64px;font-weight: bold;padding: 0;margin:0;mso-line-height-rule: exactly;}
+            p.leader {text-transform: uppercase;font-weight: bold;font-size: 12px;color: #cccccc;letter-spacing: 1px;mso-line-height-rule: exactly;}
+            p.byline {text-transform: uppercase;font-size:14px;font-weight: bold;line-height: 1.5em; color:maroon;mso-line-height-rule: exactly;}
+            p.credit {text-align: right;font-size:14px;font-style: italic;background-color: #eeeeee;padding:1%;margin: 0;mso-line-height-rule: exactly;}
+            p.cutline {font-size:14px;background-color: #eeeeee;padding:1%;margin: 0;mso-line-height-rule: exactly;}
+            h3.housead {line-height: 1.4em;}
+            blockquote {font-family: Georgia,serif;font-weight: bold;line-height:26px;font-size:20px;mso-line-height-rule: exactly;}
+            p.source {text-transform: uppercase;font-size:14px;font-weight: bold;line-height: 1.5em; color:maroon;mso-line-height-rule: exactly;}
+            p a, li a { position: relative;
+                margin: .67em 0;
+                padding: 0 .15em;
+                text-decoration: none;
+                color: #284f8c !important;
+                border-bottom: 3px solid gold;}
+            </style>
+
+            <!-- What it does: Makes background images in 72ppi Outlook render at correct size. -->
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:AllowPNG/>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+    </xml>
+    <![endif]-->
+
+    <!-- Progressive Enhancements -->
+    <style>
+
+        /* What it does: Hover styles for buttons */
+        .button-td,
+        .button-a {
+            transition: all 100ms ease-in;
+        }
+        .button-td:hover,
+        .button-a:hover {
+            background: #555555 !important;
+            border-color: #555555 !important;
+        }
+
+    </style>
+
+</head>
+<body width="100%" bgcolor="#222222" style="margin: 0; mso-line-height-rule: exactly;">
+    <center style="width: 100%; background: #222222; text-align: left;">
+
+        <!-- Visually Hidden Preheader Text : BEGIN -->
+        <div style="display:none;font-size:1px;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;mso-hide:all;font-family: sans-serif;">
+            (Optional) This text will appear in the inbox preview, but not the email body.
+        </div>
+        <!-- Visually Hidden Preheader Text : END -->
+
+        <!--
+            Set the email width. Defined in two places:
+            1. max-width for all clients except Desktop Windows Outlook, allowing the email to squish on narrow but never go wider than 600px.
+            2. MSO tags for Desktop Windows Outlook enforce a 600px width.
+        -->
+        <div style="max-width: 600px; margin: auto;" class="email-container">
+            <!--[if mso]>
+            <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="600" align="center">
+            <tr>
+            <td>
+                <![endif]-->
+
+                <!-- Email Header : BEGIN -->
+                <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
+                </table>
+                <!-- Email Header : END -->
+
+                <!-- Email Body : BEGIN -->
+                <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
+
+                    <!-- 1 Column Text + Button : BEGIN -->
+                    <tr>
+                        <td bgcolor="#ffffff">
+                            <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td style="padding: 20px; font-family: sans-serif; font-size: 19px; line-height: 23px; color: #555555;">
+
+<p style="text-align: center;margin:0;padding:0;"><img src="http://extras.denverpost.com/newsletter/mile-high-roundup-vert.png" aria-hidden="true" width="350" alt="alt_text" border="0" style="height: auto; background: #ffffffd; font-family: sans-serif; width:350px;font-size: 15px; line-height: 20px; color: #555555;">
+<!-- SPONSORED HEADER -->
+<center><p class="leader">Presented By</p>
+<p style="text-align: center;margin:0;padding:0;"<a href="http://afw.com" style="text-decoration:none !important;"><img src="http://extras.denverpost.com/newsletter/ads/afw-copyright.png" aria-hidden="true" width="220" alt="alt_text" border="0" style="height: auto; background: #ffffffd; font-family: sans-serif; width:220px;font-size: 15px; line-height: 100%; color: #555555;"></a></p></center>
+<!-- END SPONSORED HEADER --></p>
+
+                        <p class="byline">By Eric Lubbers<br /><a href="mailto:elubbers+mhr@denverpost.com?subject=Roundup Feedback" title="Email Eric Lubbers @ The Denver Post">elubbers@denverpost.com</a> / <a href="http://twitter.com/brofax" title="@brofax on Twitter">@brofax</a></p>
+
+                        <p>Good morning and happy May Day folks. May Day in America is one of those holidays that has so many origins that most don't know what to celebrate. There's the pseudo-Roman version, including maypoles (which I definitely remember doing in elementary school), that was an effort by wealthy “social reformers” of the 1800s to <a href="http://americanhistory.si.edu/blog/may-day-americas-traditional-radical-complicated-holiday-part-1" title="http://americanhistory.si.edu/blog/may-day-americas-traditional-radical-complicated-holiday-part-1">instill "Anglo-Saxon" values on the country's growing migrant class</a>. <strong><em>— Smithsonian</em></strong></p>
+                        <p>Then there's the International Worker's Day that is still celebrated in much of the world — despite the fact that it <a href="http://time.com/3836834/may-day-labor-history/" title="http://time.com/3836834/may-day-labor-history/">started with a worker's strike in 1886 Chicago for an eight-hour work day</a> <strong><em>— Time</em></strong>.</p>
+                        <p>Most recently — and controversially — May 1 was christened “Loyalty Day” by President Eisenhower as a counter measure to labor activists, and <a href="https://www.washingtonpost.com/news/answer-sheet/wp/2017/05/01/may-1-is-loyalty-day-in-america-heres-trumps-view-of-the-day-and-obamas/?utm_term=.fa62bfb2edbb" title="https://www.washingtonpost.com/news/answer-sheet/wp/2017/05/01/may-1-is-loyalty-day-in-america-heres-trumps-view-of-the-day-and-obamas/?utm_term=.fa62bfb2edbb">every president since has continued the tradition</a> — yes, even the Democrats. <strong><em>— WaPo</em></strong></p>
+                        <p>But the best thing about May Day being on May 1 is that it's almost always a nice day, so choose your celebration (or none at all) and enjoy it.</p>
+                        <p>OK, history lesson over, let's get to the news.</p>
+                        <p>(Oh yeah, we're also debuting the brand new Roundup design today. <a href="mailto:elubbers@denverpost.com?Subject=Roundup 2.0 feedback">Please email me with your feedback</a> — especially the bad stuff — as this is a work in progress. Thanks!)</p>
+
+                        <!-- Button : BEGIN -->
+                        <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
+                            <tr>
+                                <td style="border-radius: 3px; background: maroon; text-align: center;" class="button-td">
+                                    <a href="[-CLICK_TO_VIEW-]" style="background: maroon; border: 15px solid maroon; font-family: sans-serif; font-size: 13px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
+                                        <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;VIEW IN BROWSER&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- Button : END -->
+                        <br>
+                        <h2>The Rundown</h2>
+                        <p>+ <strong>Today's Weather</strong>: You might see <a href="http://www.denverpost.com/2017/05/01/denver-snow-rain/" title="http://www.denverpost.com/2017/05/01/denver-snow-rain/">“snow” in this headline and panic</a>, but it's the “fall to the ground and melt” kind, not the blanket we got this weekend.</p>
+                        <p>+ <strong>Today's Editorial</strong>: “<a href="http://www.denverpost.com/2017/04/28/hickenlooper-should-commute-nathan-dunlaps-sentence-and-lead-on-death-penalty-debate/" title="http://swww.denverpost.com/2017/04/28/hickenlooper-should-commute-nathan-dunlaps-sentence-and-lead-on-death-penalty-debate/">Hickenlooper should commute Nathan Dunlap’s sentence and lead on death penalty debate</a>”</p>
+                        <p>+ <strong>Ask Amy</strong>: Amy gives some advice to a man on how to <a href="http://www.denverpost.com/2017/04/30/ask-amy-this-gentleman-prefers-womens-wear/" title="http://www.denverpost.com/2017/04/30/ask-amy-this-gentleman-prefers-womens-wear/">break the news to his new girlfriend that he enjoys wearing ladies' underwear</a>.</p>
+                        <h2>Two sides of Colorado's opioid epidemic</h2>
+                        <p class="number">91</p>
+                        <p>That's how many people Vernon Lewis, a former homeless addict, <a href="http://www.denverpost.com/2017/04/28/opioid-overdoses-naloxone/" title="http://www.denverpost.com/2017/04/28/opioid-overdoses-naloxone/">has personally saved from opioid overdose by administering naloxone injections</a> — which are currently being administered nearly three times daily in Colorado. As part of his work with the Harm Reduction Action Center, Lewis is known as the “Uber of Narcan” or the “naloxone ninja,” willing to borrow a bicycle in the middle of the night to reach someone who has overdosed (Jennifer Brown has <a href="http://www.denverpost.com/2017/04/28/opioid-overdoses-naloxone/" title="http://www.denverpost.com/2017/04/28/opioid-overdoses-naloxone/">much more on Lewis and the drug's use in Colorado</a>). </p>
+                        <blockquote>
+                            “One of the most devastating things to watch is somebody that you love slowly kill themselves.”
+                            <p class="source">Rep. Brittany Pettersen, speaking about her mother, Stacy</p>
+                        </blockquote>
+                        <p>Off the streets and in the Capitol, a different facet of the opioid crisis is <a href="“One of the most devastating things to watch is somebody that you love slowly kill themselves,”" title="“One of the most devastating things to watch is somebody that you love slowly kill themselves,”">taking shape thanks to Lakewood Democrat Brittany Pettersen</a>, whose mother Stacy is a prescription drug addict and as recently as last month had overdosed. John Frank looks at how her mother's experience has driven Pettersen to <a href="http://www.denverpost.com/2017/04/30/colorado-drug-abuse-brittany-pettersen/" title="http://www.denverpost.com/2017/04/30/colorado-drug-abuse-brittany-pettersen/">push the state to create more robust substance abuse programs</a>.</p>
+                        <center>
+                        <p style="text-align: center;margin:0;padding:0;"<a href="http://www.denverpost.com/2017/04/30/colorado-drug-abuse-brittany-pettersen/" style="text-decoration:none !important;"><img src="http://www.denverpost.com/wp-content/uploads/2017/04/pettersen.jpg?w=580" aria-hidden="true" width="580" alt="alt_text" border="0" style="height: auto; background: #ffffffd; font-family: sans-serif; width:100%;font-size: 15px; line-height: 100%; color: #555555;"></a></p>
+                        <p class="credit">Daniel Brenner, Special to The Denver Post</p>
+                        <p class="cutline">Representative Brittany Pettersen and her mother Stacy pose for a picture at their home in Lakewood.</p>
+                        </center>
+                        
+                        <h2>Firestone explosion launches new debate over old pipelines</h2>
+                        <center>
+<p style="text-align: center;margin:0;padding:0;"<a href="http://www.denverpost.com/2017/05/01/denver-parking-scale-back-approved-city-council/" style="text-decoration:none !important;"><img src="http://www.denverpost.com/wp-content/uploads/2016/07/3201-osage-street.jpg?w=580" aria-hidden="true" width="580" alt="alt_text" border="0" style="height: auto; background: #ffffffd; font-family: sans-serif; width:100%;font-size: 15px; line-height: 100%; color: #555555;"></a></p>
+<p class="credit">Eric Lubbers</p>
+<p class="cutline">Image Test for Outlook</p>
+</center>
+                        <p>In the days since the deadly explosion at a home in Firestone, wells operated by <a href="http://www.denverpost.com/2017/04/26/anadarko-petroleum-shut-down-3000-wells-after-house-explosion/" title="http://www.denverpost.com/2017/04/26/anadarko-petroleum-shut-down-3000-wells-after-house-explosion/">Anadarko</a> and now <a href="http://www.denverpost.com/2017/04/28/great-western-shuts-down-wells/" title="http://www.denverpost.com/2017/04/28/great-western-shuts-down-wells/">Great Western</a> have been shuttered while investigations are completed. One point of contention: pressure tests to determine leaks that <a href="http://www.denverpost.com/2017/04/28/firestone-explosion-anadarko-well-pressure-test/" title="http://www.denverpost.com/2017/04/28/firestone-explosion-anadarko-well-pressure-test/">may not have been performed when the well closest to the home was restarted</a>.</p>
+                        <p>A different angle, and a stickier one, is also being investigated. State regulators adopted new rules establishing big buffers between new drilling and homes, but left it up to cities like Firestone (current rule: 150 feet) to determine how close new homes could be to old wells. <a href="http://www.denverpost.com/2017/04/30/firestone-home-explosion-drilling-setbacks/" title="http://www.denverpost.com/2017/04/30/firestone-home-explosion-drilling-setbacks/">Chris Osher and Bruce Finley's story</a> is a must read for anyone living near — or potentially buying near — some of the state's thousands of wells.</p>
+                        <h2>Old Sports Authority HQ climbing out of vacancy</h2>
+                        <p>Now this is an idea I can get behind: Earth Treks, already the world's largest indoor climbing gym company, will be taking over the sprawling former Sports Authority headquarters in Englewood as their own — <a href="http://www.denverpost.com/2017/05/01/americas-largest-climbing-gym-englewood/" title="http://www.denverpost.com/2017/05/01/americas-largest-climbing-gym-englewood/">including building the world's largest climbing gym</a>. And that's not all, writes Jason Blevins: The company will be eyeing the abundant <a href="http://www.denverpost.com/2017/05/01/americas-largest-climbing-gym-englewood/" title="http://www.denverpost.com/2017/05/01/americas-largest-climbing-gym-englewood/">carcasses of Sports Authority stores around the country</a> to build a network of their branded climbing gyms.</p>
+                        <p>+ While we're talking “alternative workouts that will kill your upper body,” <a href="http://www.denverpost.com/2017/04/28/wolfpack-ninja-tour-american-ninja-warrior/" title="http://www.denverpost.com/2017/04/28/wolfpack-ninja-tour-american-ninja-warrior/">we have to mention the rise of American Ninja Warrior as a lifestyle</a> — how Colorado is leading the pack (check out the video on that story. Your shoulders will hurt just watching it).</p>
+
+                        <h2>By The Numbers</h2>
+                        <p class="number">$100,000+</p>
+                        <p>That's how much salvaged barnwood Broomfield-based Front Range Timber was selling <em>per month</em> last summer as just one player in Colorado's <a href="http://www.denverpost.com/2017/04/28/wolfpack-ninja-tour-american-ninja-warrior/" title="http://www.denverpost.com/2017/04/28/wolfpack-ninja-tour-american-ninja-warrior/">state's boom in repurposing old, tired barnwood</a>.</p>
+                        <p class="number">71 miles</p>
+                        <p>That's how far the High Line Canal stretches across the Front Range, from Douglas County to Green Valley Ranch. Last week, backers of the 100-plus-year-old canal presented a huge master plan on how to manage this historic resource. <a href="http://www.denverpost.com/2017/04/28/high-line-canal-blueprint/" title="http://www.denverpost.com/2017/04/28/high-line-canal-blueprint/">Check it out for yourself</a>.</p>
+                        <p class="number">24.64 years</p>
+                        <p>As of today, that's <a href="http://www.denverpost.com/2017/04/28/rockies-have-youngest-rotation-majors/" title="http://www.denverpost.com/2017/04/28/rockies-have-youngest-rotation-majors/">the average age of the Rockies starting pitching rotation</a>, the youngest in the majors (24.64 years ago is Sept. 14, 1992, for those keeping score at home). As Nick Groke writes, <a href="http://www.denverpost.com/2017/04/28/rockies-have-youngest-rotation-majors/" title="http://www.denverpost.com/2017/04/28/rockies-have-youngest-rotation-majors/">this is not an accident</a>.</p>
+                        <p class="number">$0.75</p>
+                        <p>Somehow, that's how much a martini costs as part of the Seersucker Martini Lunch <a href="http://www.denverpost.com/2017/04/28/rockies-have-youngest-rotation-majors/" title="http://www.denverpost.com/2017/04/28/rockies-have-youngest-rotation-majors/">at the latest Southern-inspired-hip-restaurant to open downtown</a>.</p>
+
+                        <h2>Quick Hits</h2>
+                        <p>+ Karen Oliveto — who was elected as The Methodist Church's first openly gay bishop — was found by the church's court to be “in violation” of church law. <a href="http://www.denverpost.com/2017/04/28/gay-bishop-karen-oliveto-methodist-church/" title="http://www.denverpost.com/2017/04/28/gay-bishop-karen-oliveto-methodist-church/">Here's what that could mean for her future</a>.</p>
+                        <p>+ 2,800 homeowners split <a href="http://www.denverpost.com/2017/04/30/short-term-vacation-rentals-colorado-mountain-towns/" title="http://www.denverpost.com/2017/04/30/short-term-vacation-rentals-colorado-mountain-towns/">about $32 million in Airbnb revenue in Colorado's mountain resort towns</a> last season, proving yet again that land is almost always a good investment.</p>
+                        <p>+ How expensive is housing in Summit County? <a href="http://www.denverpost.com/2017/04/28/summit-county-housing-expensive/" title="http://www.denverpost.com/2017/04/28/summit-county-housing-expensive/">Too expensive to hiring a new housing director</a>.</p>
+                        <p>+ If I told you that someone <a href="http://www.denverpost.com/2017/04/30/teen-jumped-fish-tank-bass-pro-shops/" title="http://www.denverpost.com/2017/04/30/teen-jumped-fish-tank-bass-pro-shops/">filmed themselves jumping off a balcony into a fish tank at Bass Pro Shops</a>, how long would it take you to conclude that it was a teen boy?</p>
+                        <p>+ Seven people were injured on Saturday when <a href="http://www.denverpost.com/2017/04/29/vehicle-drives-into-parker-store/" title="http://www.denverpost.com/2017/04/29/vehicle-drives-into-parker-store/">a vehicle plowed through a running store in Parker</a>.</p>
+                        <p>+ Tonight's the night when Denver City Council will settle — or at least tone down — a hot argument <a href="http://www.denverpost.com/2017/04/30/denver-city-council-parking-exemption-debate/" title="http://www.denverpost.com/2017/04/30/denver-city-council-parking-exemption-debate/">over the requirement to provide parking for new apartment developments</a>.</p>
+                        <p>+ Deputy Chief Matt Murray told The Denver Post that he was not involved with the case he is currently under investigation of mishandling because he was camping. But <a href="http://www.denverpost.com/2017/04/28/denver-police-matt-murray-phone-records/" title="http://www.denverpost.com/2017/04/28/denver-police-matt-murray-phone-records/">phone records show that he had at least seven phone calls with players in the case</a> on the day he was allegedly camping.</p>
+                        <p>+ Colorado's Canyons of the Ancients <a href="http://www.denverpost.com/2017/04/28/trump-national-monument-review-canyons-of-the-ancients/" title="http://www.denverpost.com/2017/04/28/trump-national-monument-review-canyons-of-the-ancients/">will not likely be a part of Donald Trump's national monument review</a>.</p>
+                        <p>+ The Colorado Mammoth are <a href="http://www.denverpost.com/2017/04/30/colorado-mammoth-equipped-for-nll-championship-push/" title="http://www.denverpost.com/2017/04/30/colorado-mammoth-equipped-for-nll-championship-push/">probably the most successful pro team in the state</a>, and they've got their eyes on a championship.</p>
+                        <p>+ “The wrap” is <a href="http://www.denverpost.com/2017/04/28/colorado-youth-corrections-wrap-restraint/" title="http://www.denverpost.com/2017/04/28/colorado-youth-corrections-wrap-restraint/">officially dead in Colorado's youth corrections system</a>.</p>
+                        <p>+ “Facing inevitable liver transplant, <a href="http://www.denverpost.com/2017/05/01/live-donor-liver-transplant-colorado/" title="http://www.denverpost.com/2017/05/01/live-donor-liver-transplant-colorado/">a young girl didn’t need to look far for a living donor</a>.”</p>
+                        <p>+ One giant Broncos draft pick was <a href="http://www.denverpost.com/2017/04/28/garett-bolles-face-broncos-draft-family-stole-show/" title="http://www.denverpost.com/2017/04/28/garett-bolles-face-broncos-draft-family-stole-show/">upstaged by his tiny baby</a>, one saw <a href="http://www.denverpost.com/2017/04/30/demarcus-walker-snow-von-miller-denver-broncos-draft/" title="http://www.denverpost.com/2017/04/30/demarcus-walker-snow-von-miller-denver-broncos-draft/">snow for the first time</a> and another has a name that has <a href="http://www.denverpost.com/2017/04/26/charmin-toilet-paper-jake-butt/" title="http://www.denverpost.com/2017/04/26/charmin-toilet-paper-jake-butt/">inspired toilet paper sponsorships</a> and what I'm predicting will be the <a href="http://www.denverpost.com/2017/04/29/jake-butt-nfl-draft-round-5-broncos/" title="http://www.denverpost.com/2017/04/29/jake-butt-nfl-draft-round-5-broncos/">best-selling Broncos jersey next season</a>.</p>
+                        <p>+ Speaking of football, the Air Force abruptly changed its policy of allowing cadets to defer their service until after a pro football career, which changes plans for <a href="http://www.denverpost.com/2017/04/29/jake-butt-nfl-draft-round-5-broncos/" title="http://www.denverpost.com/2017/04/29/jake-butt-nfl-draft-round-5-broncos/">star receiver Jalen Robinette</a> and <a href="http://www.denverpost.com/2017/04/30/air-force-weston-steelhammer-shocked-policy-change-nfl-draft/" title="http://www.denverpost.com/2017/04/30/air-force-weston-steelhammer-shocked-policy-change-nfl-draft/">impressively named safety Weston Steelhammer</a>.</p>
+                        <p>+ “<a href="http://www.denverpost.com/2017/05/01/aspen-cannabis-infused-buffalo-jerky/" title="http://www.denverpost.com/2017/05/01/aspen-cannabis-infused-buffalo-jerky/">Marijuana-infused buffalo jerky</a>” may be the single most Colorado product I've ever heard of.</p>
+
+                        <!-- HOUSE AD --> <h3 class="housead"><span style="color:#812317;">Support local journalism:</span> Receive 20 weeks of The Denver Post, delivered Wed/Sun/Holidays <a href="https://www.denverpostmemberservices.com/dssSubscribe.aspx?pid=1089" title="https://www.denverpostmemberservices.com/dssSubscribe.aspx?pid=1089">for only $2 per week</a>. This includes the digital replica edition on all your devices and access to the digital The Washington Post.</h3> <!-- END HOUSE AD --> 
+
+                        <h2>What We're Reading</h2>
+                        <p>+ Alamo Drafthouse is set to open on West Colfax Avenue, and with it a major push in the <a href="http://theknow.denverpost.com/2017/04/27/alamo-drafthouse-west-colfax-sloans-lake-opening-2017/142589/" title="http://theknow.denverpost.com/2017/04/27/alamo-drafthouse-west-colfax-sloans-lake-opening-2017/142589/">gentrification of the gritty, historic neighborhood</a>. <strong><em>— The Know</em></strong></p>
+                        <p>+ Here is a <a href="http://thisobscuredesireforbeauty.tumblr.com/post/160156560742/groucho-marx-source" title="http://thisobscuredesireforbeauty.tumblr.com/post/160156560742/groucho-marx-source">photo of Groucho Marx</a> looking fly in a Mickey Mouse shirt for absolutely no reason. <strong><em>— Tumblr</em></strong></p>
+                        <p>+ There are few places in the world that are more dangerous than Mexico to be a journalist. The New York Times looks <a href="https://www.nytimes.com/2017/04/29/world/americas/veracruz-mexico-reporters-killed.html" title="https://www.nytimes.com/2017/04/29/world/americas/veracruz-mexico-reporters-killed.html">at the toll the nation's decades of drug wars have had on the journalism that helps expose it</a>. <strong><em>— NYT</em></strong></p>
+                        <p>+ The EPA is under fire from all angles, but man <a href="https://www.wired.com/2017/04/can-now-design-manual-made-epa-cool/?mbid=social_fb" title="https://www.wired.com/2017/04/can-now-design-manual-made-epa-cool/?mbid=social_fb">they had a super-cool design manual back in the ’70s</a>. <strong><em>— WIRED</em></strong></p>
+                        <p>+ From the “What Goes Around Comes Around” file: This <a href="http://www.atlasobscura.com/articles/watch-how-globes-were-made-in-1955-in-this-north-london-workshop" title="http://www.atlasobscura.com/articles/watch-how-globes-were-made-in-1955-in-this-north-london-workshop">video of making a globe by hand from 1955</a>, juxtaposed with an Instagram account <a href="https://www.instagram.com/globemakers/" title="https://www.instagram.com/globemakers/">of a London-based company that <em>just</em> handcrafts globes</a>. <strong><em>— Atlas Obscura, Bellerby & Co. Globemakers</em></strong></p>
+                        <p>+ Half the number of current young people are drinking and doing drugs than previous generations, and <a href="https://www.vice.com/en_uk/article/this-is-why-gen-z-takes-fewer-drugs-than-you" title="https://www.vice.com/en_uk/article/this-is-why-gen-z-takes-fewer-drugs-than-you">one expert credits Snapchat and vanity</a>. <strong><em>— VICE</em></strong></p>
+
+                        <h2>Meanwhile, In America</h2>
+                        <p>+ The government <a href="http://www.denverpost.com/2017/04/30/congress-reaches-deal-fund-government/" title="http://www.denverpost.com/2017/04/30/congress-reaches-deal-fund-government/">will be funded through September</a>.</p>
+                        <p>+ The LA Times heads to Pueblo to talk to Trump supporters and <a href="http://www.latimes.com/politics/la-na-pol-trump-100-days-pueblo-20170427-story.html" title="http://www.latimes.com/politics/la-na-pol-trump-100-days-pueblo-20170427-story.html">finds that they have no regrets</a>. <strong><em>— LAT</em></strong></p>
+                        <p>+ Donald Trump says he doesn't travel to New York City because <a href="http://www.denverpost.com/2017/04/28/trump-new-york-city-visits-expensive/" title="http://www.denverpost.com/2017/04/28/trump-new-york-city-visits-expensive/">it would be too expensive for taxpayers</a> (but says his dozen-plus excursions to play golf at his resorts are “work”). <strong><em>— via AP</em></strong></p>
+                        <p>+ Trump also called Rodrigo Duterte of the Philippines last week and had <a href="https://www.nytimes.com/2017/04/30/us/politics/trump-duterte.html?_r=0" title="https://www.nytimes.com/2017/04/30/us/politics/trump-duterte.html?_r=0">a “very friendly conversation” and invited him to the White House</a>. <strong><em>— NYT</em></strong></p>
+                        <p>+ Who is Duterte, you ask? Just the ruthless authoritarian who once admitted to <a href="https://nytimes.com/2016/12/16/world/asia/philippines-rodrigo-duterte-confirms-killings-davao.html?referer=" title="https://nytimes.com/2016/12/16/world/asia/philippines-rodrigo-duterte-confirms-killings-davao.html?referer=">personally killing three people while mayor of Davao City</a> and whose brutal antidrug campaign <a href="https://www.nytimes.com/interactive/2016/12/07/world/asia/rodrigo-duterte-philippines-drugs-killings.html?smid=fb-share" title="https://www.nytimes.com/interactive/2016/12/07/world/asia/rodrigo-duterte-philippines-drugs-killings.html?smid=fb-share">has killed thousands of people and left his country terrified of death squads</a>. <strong><em>— NYT</em></strong></p>
+                        <p>+ While thousands marched <a href="http://www.denverpost.com/2017/04/29/marchers-use-trumps-100th-day-to-protest-climate-policies/" title="http://www.denverpost.com/2017/04/29/marchers-use-trumps-100th-day-to-protest-climate-policies/">to protest climate policies</a>, the EPA didn't even try to hide it anymore: The agency run by climate change denier Scott Pruitt <a href="https://www.washingtonpost.com/news/energy-environment/wp/2017/04/28/epa-website-removes-climate-science-site-from-public-view-after-two-decades/?utm_term=.1a25bd1435a3" title="https://www.washingtonpost.com/news/energy-environment/wp/2017/04/28/epa-website-removes-climate-science-site-from-public-view-after-two-decades/?utm_term=.1a25bd1435a3">removed its popular climate science page from public view</a> to “better represent the new direction the agency is taking.” <strong><em>— WaPo</em></strong> </p>
+                        <p>+ The Trump administration is also “looking at” trying to make it <a href="http://www.denverpost.com/2017/04/30/trump-administration-easier-sue-media/" title="http://www.denverpost.com/2017/04/30/trump-administration-easier-sue-media/">easier to sue the already financially fragile media when he doesn't like a story</a>, according to Chief of Staff Reince Priebus.  <strong><em>— via WaPo</em></strong></p>
+                        <p>+ In another volley at his perceived enemies, Trump is apparently trying to <a href="http://www.foxnews.com/politics/2017/04/27/trump-eyes-bid-to-split-up-9th-circuit-court-amid-sanctuary-city-travel-ban-disputes.html" title="http://www.foxnews.com/politics/2017/04/27/trump-eyes-bid-to-split-up-9th-circuit-court-amid-sanctuary-city-travel-ban-disputes.html">“break up” the 9th Circuit court</a> after it yet again punctured one of his executive orders. <strong><em>— Fox News</em></strong></p>
+                        <p>+ Here's the <a href="https://www.brookings.edu/blog/unpacked/2017/04/24/the-threat-from-north-korea/" title="https://www.brookings.edu/blog/unpacked/2017/04/24/the-threat-from-north-korea/">short and sweet version of the threat North Korea actually poses</a> to the U.S. <strong><em>— Brookings Institute</em></strong></p>
+                        <p>+ Trump still hasn't ruled out <a href="http://www.denverpost.com/2017/04/30/donald-trump-north-korea/" title="http://www.denverpost.com/2017/04/30/donald-trump-north-korea/">military action against North Korea</a> over economic sanctions, which might not be as effective <a href="http://www.csmonitor.com/World/Asia-Pacific/2017/0501/As-North-Korea-s-economy-grows-Kim-tries-to-wield-a-double-edged-sword" title="http://www.csmonitor.com/World/Asia-Pacific/2017/0501/As-North-Korea-s-economy-grows-Kim-tries-to-wield-a-double-edged-sword">as the dictatorship's economy starts to grow</a>. <strong><em>— WaPo, Christian Science Monitor</em></strong></p>
+                        <p>+ If you ask the National Enquirer (which, fun fact, only <a href="https://www.buzzfeed.com/annehelenpetersen/the-national-enquirer-just-bought-us-weekly-heres-why-that?utm_term=.jv9p2Jw5Ye#.vk1XQmA9qj" title="https://www.buzzfeed.com/annehelenpetersen/the-national-enquirer-just-bought-us-weekly-heres-why-that?utm_term=.jv9p2Jw5Ye#.vk1XQmA9qj">6% of people who read it get news from the Internet</a>) <a href="http://jezebel.com/lets-examine-this-national-enquirer-cover-1794685044" title="http://jezebel.com/lets-examine-this-national-enquirer-cover-1794685044">WORLD WAR 3 IS COMING</a>, which makes some kind of statement on how ultra-masculine military messaging is resonating with at least one part of Trump's base. <strong><em>— BuzzFeed News, Jezebel</em></strong></p>
+                        <p>+ Oh, and Donald Trump celebrated his first 100 days with <a href="http://www.denverpost.com/2017/04/29/trump-100-days-pennsylvania-rally/" title="http://www.denverpost.com/2017/04/29/trump-100-days-pennsylvania-rally/">a campaign-style rally in Pennsylvania</a> that was attended by <a href="https://twitter.com/Olivianuzzi/status/858455688779112449" title="https://twitter.com/Olivianuzzi/status/858455688779112449">at least one skinhead</a> wearing a t-shirt of a <a href="https://www.splcenter.org/fighting-hate/extremist-files/group/keystone-united" title="https://www.splcenter.org/fighting-hate/extremist-files/group/keystone-united">rebranded skinhead group called “Keystone United.”</a> <strong><em>— via AP, Olivia Nuzzi, SLPC</em></strong></p>
+
+                        <h2>Song of the Day</h2>
+                        <p><strong>Song:</strong> “<a href="https://www.youtube.com/watch?v=DaERHs8Q93E" title="https://www.youtube.com/watch?v=DaERHs8Q93E">9 to 5</a>,” “<a href="https://www.youtube.com/watch?v=IuQxyhx3W60" title="https://www.youtube.com/watch?v=IuQxyhx3W60">Solidarity Forever</a>”</p>
+                        <p><strong>Artist:</strong> Dolly Parton, Pete Seeger</p> 
+                        <p><strong>Sounds like:</strong> Two very different songs with <a href="https://www.thenation.com/article/top-ten-labor-day-songs/" title="https://www.thenation.com/article/top-ten-labor-day-songs/">the same common core</a>: The people doing the labor in America are undervalued and exploited as a rule. Doesn't hurt that they're both catchy in their own ways.</p>
+                        <blockquote>
+                            “They have taken untold millions that they never toiled to earn / But without our brain and muscle not a single wheel can turn / We can break their haughty power, gain our freedom when we learn / That the union makes us strong”
+                            <p class="source">Pete Seeger, “<a href="https://genius.com/Pete-seeger-solidarity-forever-lyrics" title="https://genius.com/Pete-seeger-solidarity-forever-lyrics">Solidarity Forever</a>”</p>
+                        </blockquote>
+
+                        <p>Did you know we put all of these songs on a <a href="http://open.spotify.com/user/ericjlubbers/playlist/0qyRwyDlwECmsGb3JwPeE8">Spotify playlist</a>, or, <strong>if you don't have a Spotify account</strong>, <a href="http://www.denverpost.com/2016/07/13/pump-up-the-jam/">a page where you non-Spotify people can listen to it</a>? It's a really, really good playlist, if I do say so myself. I listen to it on shuffle just about every day (and you should too).</p>
+
+                        <h2>Hat Tips & Corrections</h2>
+                        <p>Remember, if you see something that doesn't look right or just have a comment, thought or suggestion, <a href="mailto:elubbers@denverpost.com">email me at elubbers@denverpost.com</a> or <a href="http://twitter.com/brofax">yell at me on Twitter</a>.</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- 1 Column Text + Button : END -->
+
+
+    <!-- 1 Column Text : END -->
+
+</table>
+<!-- Email Body : END -->
+
+<!-- Email Footer : BEGIN --> <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="600" style="margin: auto;" class="email-container"> <tr> <td style="padding: 40px 10px;width: 100%;font-size: 12px; font-family: sans-serif; line-height:18px; text-align: center; color: #888888;" class="x-gmail-data-detectors"> <webversion style="color:#cccccc; text-decoration:underline; font-weight: bold;">View as a Web Page</webversion> <br><br> The Denver Post<br>101 W. Colfax Ave.<br>Denver, CO 80202<br>(303) 954-3100 <br><br> <a href="http://mail.denverpost.com/dpopreference/preference?Email=[-EMAILADDR-]" title="http://mail.denverpost.com/dpopreference/preference?Email=[-EMAILADDR-]"><unsubscribe style="color:#888888; text-decoration:underline;">MANAGE EMAIL PREFERENCES</unsubscribe></a> || <a href="[-WEB_UNSUB-]" title="[-WEB_UNSUB-]"><unsubscribe style="color:#888888; text-decoration:underline;">UNSUBSCRIBE</unsubscribe></a> </td> </tr> </table> <!-- Email Footer : END --> </center> </body> </html>
