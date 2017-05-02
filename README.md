@@ -5,7 +5,7 @@ Roundup-specific codebase for The Denver Post.
 ## Release notes 0.2
 
 + Add `<p>&nbsp;</p>` above `<h2>` tags to provide on-demand whitespace.
-+ Because of the more visible link styling, try to link fewer word per sentence. Only real complaint from non-Outlook users yesterday.
++ Because of the more visible link styling, try to link fewer words per link. Only real complaint from non-Outlook users yesterday.
 
 ## Release notes 0.1
 
