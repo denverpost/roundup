@@ -4,6 +4,7 @@ Roundup-specific codebase for The Denver Post.
 
 ## Release notes 0.2
 
++ Tweaked link styling to a slightly less bright underline.
 + Add `<p>&nbsp;</p>` above `<h2>` tags to provide on-demand whitespace.
 + Because of the more visible link styling, try to link fewer words per link. Only real complaint from non-Outlook users yesterday.
 
